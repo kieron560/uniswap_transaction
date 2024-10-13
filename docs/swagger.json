@@ -1,0 +1,44 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "Sample API",
+      "description": "A sample API that demonstrates how to use Flask-SwaggerUI.",
+      "version": "1.0"
+    },
+    "basePath": "/server",
+    "schemes": [
+      "http"
+    ],
+    "paths": {
+      "/transactions": {
+        "get": {
+          "summary": "Returns a simple greeting message.",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [{
+            "in": "query",
+            "name": "hash",
+            "required": true,
+            "schema": {
+                "type": "string"
+            },
+            "allowedReserved": false
+          }],
+          "responses": {
+            "200": {
+              "description": "Successful response.",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }

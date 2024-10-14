@@ -2,9 +2,6 @@
 import requests
 import os
 import math
-import aiohttp
-import asyncio
-from urllib.parse import urlencode
 
 import server.binance as binance
 

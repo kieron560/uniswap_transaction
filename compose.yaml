@@ -2,14 +2,8 @@ services:
   web:
     build: .
     ports:
-      - "8080:5000"
-  swagger:
-    image: swaggerapi/swagger-ui
-    expose:
-      - 8080
-    ports:
-      - 8080:8080
+      - "5000:5000"
     environment:
-      SWAGGER_JSON: /docs/swagger.json
-    
+      - PYTHONUNBUFFERED=1
+      - ETHERSCAN_API_KEY=${ETHERSCAN_API_KEY}
  

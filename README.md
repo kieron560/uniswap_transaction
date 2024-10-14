@@ -8,9 +8,6 @@ This project is built with the following:
 - Flask
 - SwaggerUI
 
-We also utilized the following downstream API services provided:
-- Etherscan: https://docs.etherscan.io/
-- Binance: 
 
 ## Project Directory
 ```
@@ -28,6 +25,8 @@ We also utilized the following downstream API services provided:
 
 ```
 - `README.md`: Markdown file briefly explaining the project
+- `Dockerfile`: Dockerfile for dockerization
+- `compose.yaml`: Used for docker compose
 - `app.py`: Where the main code is executed
 - `docs/swagger.json`: Our Interface file describing our HTTP Rest APIs
 - `requirements.txt`: Used for docker compose
@@ -36,9 +35,28 @@ We also utilized the following downstream API services provided:
 
 ## Project Setup
 
+1. Clone the project
+```
+git clone 
+```
+2. In the project directory, create a `.env` file with the following content:
+```
+ETHERSCAN_API_KEY = <api_key>
+```
+This allows you to access the EtherScan's API.
 
-
-
+3. To run the application, ensure docker compose is installed. Then run the following:
+```
+docker compose build
+docker compose up
+```
+4. Access the api testing locally via:
+```
+http://localhost:5000/swagger/
+```
+I have configured the app to run on port 5000, so this should work.
+The site should look something like this. This is based off Swagger UI and we can test our APIs here.
+![alt text](docs/readme_image1.png)
 
 ## Testing
 Ensure that the project setup is completed beforehand.

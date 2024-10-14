@@ -10,7 +10,7 @@
       "http"
     ],
     "paths": {
-      "/transactions": {
+      "/transaction_fee": {
         "get": {
           "summary": "Returns a simple greeting message.",
           "produces": [

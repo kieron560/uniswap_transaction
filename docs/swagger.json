@@ -10,9 +10,9 @@
       "http"
     ],
     "paths": {
-      "/transaction_fee": {
+      "/transaction_fee_single": {
         "get": {
-          "summary": "Returns a simple greeting message.",
+          "summary": "Calculates the transaction fee in USDT given a transaction hash",
           "produces": [
             "application/json"
           ],
@@ -27,7 +27,49 @@
           }],
           "responses": {
             "200": {
-              "description": "Successful response.",
+              "description": "Successful response",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/transaction_fee_batch": {
+        "post": {
+          "summary": "Calculates the transaction fee in USDT given a list of transaction hash",
+          "consumes": [
+            "application/json"
+          ],
+          "requestBody": {
+            "description": "List of transaction hashes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "hash": {
+                      "type": "array",
+                        "items": {
+                          "type": "string",
+                          "example": "0x123123123"
+                        },
+                        "description": "List of transaction hashes to process"
+                    }
+
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Successful response",
               "schema": {
                 "type": "object",
                 "properties": {

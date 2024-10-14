@@ -18,24 +18,24 @@ swagger = Swagger(app)
 def get_transaction_fee():
     hash = request.args.get("hash")
     if hash is None or hash == "":
-        return ""
+        return "Hash cannot be empty", 404
     
     internal_transaction_list = etherscan.get_internal_transaction_list_by_hash([hash])
     result = etherscan.get_token_transfer_fee_by_hash(internal_transaction_list, hash)
 
-    return jsonify(result)
+    return jsonify(result), 200
 
 @app.route("/transaction_fee_batch", methods=['POST'])
 def get_transaction_fee_batch():
     hash = request.get_json()["hash"]
     if hash is None or len(hash) == 0:
-        return "helllooo"
+        return "Hash cannot be empty", 404
     
     # concurrent api calls to get the transaction fee for each hash
-    internal_transaction_list = etherscan.get_internal_transaction_list_by_hash_batch(hash)
-    result = etherscan.get_token_transfer_fee_by_hash_batch(internal_transaction_list, hash)
+    internal_transaction_map = etherscan.get_internal_transaction_list_by_hash_batch(hash)
+    result = etherscan.get_token_transfer_fee_by_hash_batch(internal_transaction_map)
 
-    return jsonify(result)
+    return jsonify(result), 200
 
 
 # Configure Swagger UI for display
@@ -45,11 +45,10 @@ swaggerui_blueprint = get_swaggerui_blueprint(
     SWAGGER_URL,
     API_URL,
     config={
-        'app_name': "Sample API"
+        'app_name': "Uniswap Transaction"
     }
 )
 app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
-
 
 @app.route('/swagger.json')
 def swagger():

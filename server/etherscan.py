@@ -7,7 +7,6 @@ import asyncio
 from urllib.parse import urlencode
 
 import server.binance as binance
-import server.helper as helper
 
 ETHERSCAN_API_KEY = "ETHERSCAN_API_KEY"
 ETHERSCAN_API_URL = "https://api.etherscan.io/api" 
@@ -29,19 +28,18 @@ def get_internal_transaction_list_by_hash(hash):
 
 
 def get_internal_transaction_list_by_hash_batch(hashlist):
-    result_data = []
-
+    result_data = {}
     for h in hashlist:
-        result_data.append(get_internal_transaction_list_by_hash(h))
+        result_data[h] = get_internal_transaction_list_by_hash(h)
         
     return result_data
 
 
-def get_token_transfer_fee_by_hash_batch(results, hash):
+def get_token_transfer_fee_by_hash_batch(results):
     final_result = []
 
-    for r in results:
-      fee = get_token_transfer_fee_by_hash(r, hash)
+    for key, val in results.items():
+      fee = get_token_transfer_fee_by_hash(val, key)
       final_result += fee
 
     return final_result
@@ -49,7 +47,7 @@ def get_token_transfer_fee_by_hash_batch(results, hash):
 
 def get_token_transfer_fee_by_hash(results, hash):
     for data in results:
-        timestampMilliSecond = helper.unix_second_to_unix_millisecond(data["timeStamp"])
+        timestampMilliSecond = unix_second_to_unix_millisecond(data["timeStamp"])
         price = binance.get_price_by_timestamp(timestampMilliSecond)
         result = []
 
@@ -59,8 +57,10 @@ def get_token_transfer_fee_by_hash(results, hash):
             if r["hash"] == hash and r["tokenSymbol"] == "WETH":
                 fee = calculate_transaction_fee_in_eth(r["gasPrice"], r["gasUsed"], r["tokenDecimal"])
                 resultData = {
+                    "txn hash": hash,
                     "block number": r["blockNumber"],
                     "timestamp": r["timeStamp"],
+                    "fee in ETH": fee,
                     "closing price in usdt": price,
                     "transaction_fee in usdt": str(fee * float(price))
                 }
@@ -93,3 +93,5 @@ def get_token_transfer_by_address(data):
 def calculate_transaction_fee_in_eth(gas_price: str, gas_used: str, token_decimal: str):
     return int(gas_price) * math.pow(10, -1 * int(token_decimal)) * int(gas_used)
 
+def unix_second_to_unix_millisecond(s):
+    return s + "000"
